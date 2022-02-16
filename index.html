@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./theme.css">
+</head>
+<body>
+    <div class="container" id='app'>
+
+        <div class="card">
+            <h1>{{title}}</h1>
+            <div class="form-control">
+                <input type="text" 
+                :placeholder="placeholderString"
+                v-model="inputValue"
+                @keypress.enter="addNewArray"
+                />
+            </div>
+            <button class="btn"
+            @click="addNewArray"
+            >Добавить</button>
+
+            <hr/>
+            <ul class="list">
+                <li class="list-item"
+                v-for="(array, index) in arrays"
+                >
+                {{toUpperCase(array)}}
+                <button 
+                class="btn danger"
+                @click="removeArray(index)"
+                >Удалить</button>
+                </li>
+                
+                <hr>
+
+                <!-- <li>
+                    <strong>Общее количество: {{arrays.length}}</strong> | Удвоенное число: {{doubleCountComputed}}
+                </li> -->
+            </ul>
+            <div v-if="arrays.length === 0">Заметок пока нет, добавьте первую заметку</div>
+
+        </div>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+        let Message = {
+            data(){
+                return{
+                    title: 'Список заметок',
+                    placeholderString: 'Введите название заметки',
+                    inputValue: '',
+                    arrays: [],
+
+                }
+            },
+            methods:{
+                addNewArray(){
+                    if(this.inputValue !== ''){
+                        this.arrays.push(this.inputValue)
+                        this.inputValue = ''
+                    }
+                    
+                },
+                removeArray(index){
+                    this.arrays.splice(index,1)
+                },
+                toUpperCase(item){
+                    const lower = item.toLowerCase()
+                    return item.charAt(0).toUpperCase() + lower.slice(1) 
+                },
+
+                // doubleCount(){
+                //     console.log('doubleCount');
+                //     return this.arrays.length * 2
+                // },
+            },
+            // computed: {
+            //     doubleCountComputed(){
+            //         console.log('doubleCountComputed');
+            //         return this.arrays.length * 2
+            //     },
+            // },
+            watch: {
+                inputValue(value){
+                    if(value.length > 10){
+                        this.inputValue = ''
+                    }
+                }
+            },
+
+            
+        }
+        Vue.createApp(Message).mount('#app')
+    </script>
+
+</body>
+</html>
